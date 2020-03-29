@@ -52,17 +52,10 @@
             }
         },
         methods: {
-            // throttle() {
-            //     const n = 10;
-            //     for(let i = 1; i <= n; i++){
-            //         var list = a.toString.split("");
-            //         list.forEach(function(num){
-            //             if(num == 1){
-            //                 sum++
-            //             }
-            //         })
-            //     }
-            // }
+
+        },
+        mounted() {
+            this.$router.push("/login")
         }
     }
 </script>
