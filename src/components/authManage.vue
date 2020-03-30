@@ -71,11 +71,6 @@
                 tableData: [],
                 searchResult: [],
                 tableHeight: 0,
-                nameFilterValue: "",
-                idFilterValue:"",
-                classLoading: false,
-                majorLoading: false,
-                departLoading: false,
                 pageMess: {
                     total:  0,
                     currentPage: 0,
@@ -100,16 +95,46 @@
                 this.tableData[index].gradeEditor = true;
             },
             handleDelete(index, row) {
-                this.tableData.splice(index, 1)
+                this.$confirm('确认删除此条记录？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios.post(
+                        'deleteAuth',
+                        row
+                    ).then(()=>{
+                        this.tableData.splice(index, 1);
+                        this.searchResult = this.tableData;
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch(()=>{
+                        this.$message.error("删除失败");
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             search() {
-                this.searchResult = [{
-                    name: '11',
-                    auth: ['上传成绩', '修改、删除成绩'],
-                    newColumnEditor:false,
-                }];
-                this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
-                this.pageMess.total = 100
+                this.$axios.post(
+                    'authSearch',
+                ).then(response=>{
+                    this.searchResult = response;
+                    this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
+                    this.pageMess.total = response.length;
+                }).catch()
+                // this.searchResult = [{
+                //     name: '11',
+                //     auth: ['上传成绩', '修改、删除成绩'],
+                //     newColumnEditor:false,
+                // }];
+                // this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
+                // this.pageMess.total = 100
 
             },
             addColumn() {
@@ -129,42 +154,24 @@
                     }
                 }
                 if(isSave){
-                    row.gradeEditor = false;
-                    row.newColumnEditor = false;
-                    this.$message({
-                        message: '保存成功',
-                        type: 'success'
+                    let tableData = this.tableData;
+                    this.$axios.post(
+                        'authManageSave',
+                        row
+                    ).then(()=>{
+                        row.gradeEditor = false;
+                        row.newColumnEditor = false;
+                        this.$message({
+                            message: '保存成功',
+                            type: 'success'
+                        });
+                        this.searchResult = tableData;
+                    }).catch(()=>{
+                        this.$message.error("保存失败");
                     });
                 }
             },
-            idFilter(value) {
-                let filterTable = this.searchResult.filter(function (row) {
-                    return row.sId.search(value) !== -1;
-                })
-                this.tableData = filterTable;
-            },
-            nameFilter(value) {
-                let filterTable = this.searchResult.filter(function (row) {
-                    return row.sName.search(value) !== -1;
-                })
-                this.tableData = filterTable;
-            },
-            loadingDepart() {
-                this.departLoading = true;
-                this.departLoading = false;
-            },
-            loadingMajor() {
-                this.majorLoading = true;
-                this.majorLoading = false;
-            },
-            loadingClass() {
-                this.classLoading = true;
-                this.classLoading = false;
-            },
 
-            printTable() {
-                document.execCommand("print");
-            },
 
             pageChange(index) {
                 this.tableData = this.searchResult.slice((index-1)*this.pageMess.pageSize, index*this.pageMess.pageSize);

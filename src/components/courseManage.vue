@@ -85,16 +85,47 @@
                 this.$nextTick(() => {
                     this.tableHeight = window.innerHeight - 152;
                 })
-            }
+            };
+            this.search()
         },
         methods: {
             handleEdit(index, row) {
                 this.tableData[index].gradeEditor = true;
             },
             handleDelete(index, row) {
-                this.tableData.splice(index, 1)
+                this.$confirm('确认删除课程？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios.post(
+                        'deleteCourse',
+                        {
+                            course: row.course
+                        }
+                    ).then(()=>{
+                        this.tableData.splice(index, 1);
+                        this.searchResult = this.tableData;
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch(()=>{
+                        this.$message.error("删除失败");
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             search() {
+                this.$axios.post(
+                    'getAllCourse',
+                ).then(response=>{
+                    this.searchResult = response;
+                });
                 this.searchResult = [{
                     sId: "161310719",
                     sName: "柯文涛",
@@ -259,11 +290,21 @@
                     }
                 }
                 if(isSave){
-                    row.gradeEditor = false;
-                    row.newColumnEditor = false;
-                    this.$message({
-                        message: '保存成功',
-                        type: 'success'
+                    this.$axios.post(
+                        'courseManageSave',
+                        {
+                            course: row.course
+                        }
+                    ).then(()=>{
+                        row.gradeEditor = false;
+                        row.newColumnEditor = false;
+                        this.$message({
+                            message: '保存成功',
+                            type: 'success'
+                        });
+                        this.searchResult = tableData;
+                    }).catch(()=>{
+                        this.$message.error("保存失败");
                     });
                 }
             },
@@ -279,22 +320,7 @@
                 })
                 this.tableData = filterTable;
             },
-            loadingDepart() {
-                this.departLoading = true;
-                this.departLoading = false;
-            },
-            loadingMajor() {
-                this.majorLoading = true;
-                this.majorLoading = false;
-            },
-            loadingClass() {
-                this.classLoading = true;
-                this.classLoading = false;
-            },
 
-            printTable() {
-                document.execCommand("print");
-            },
 
             pageChange(index) {
                 this.tableData = this.searchResult.slice((index-1)*this.pageMess.pageSize, index*this.pageMess.pageSize);

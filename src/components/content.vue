@@ -1,17 +1,39 @@
 <template>
-    <div id="app">
+    <div >
+        <aside class="aside">
+            <div class="asideTop">
+                <div class ="user">
+                    <div class="userHead"></div>
+                    {{username}}
+                </div>
+            </div>
+            <div class="menu">
+                <el-menu
+                        default-active="2"
+                        class="el-menu-vertical-demo"
+                        router
+                        @open="handleOpen"
+                        @close="handleClose"
+                        background-color="#545c64"
+                        text-color="#fff"
+                        active-text-color="#ffd04b">
+                    <el-menu-item v-for="(item,index) in asideMenu" :index=index>
+                        <i class="el-icon-menu"></i>
+                        <span slot="title">{{item}}</span>
+                    </el-menu-item>
+                </el-menu>
+            </div>
+        </aside>
+        <body class="body">
         <router-view></router-view>
+        </body>
     </div>
 </template>
 
 <script>
-    import login from './components/login.vue'
 
     export default {
-        name: 'App',
-        components: {
-            login
-        },
+        name: 'content',
         data() {
             return {
                 asideMenu: {
@@ -29,7 +51,6 @@
 
         },
         mounted() {
-            // this.$router.push("/login")
         }
     }
 </script>

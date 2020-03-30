@@ -33,7 +33,18 @@
         },
         methods: {
             resetPwd() {
+                let userId = this.$store.getters.username;
+                let newPwd = this.newPwd;
+                this.$axios.post(
+                    "resetPwd",
+                    {
+                        userId:userId,
+                        newPwd:newPwd
+                    }).then(()=>{
+                        this.$store.commit('SET_PASSWORD', newPwd);
+                    }).catch(()=>{
 
+                })
             }
         }
 

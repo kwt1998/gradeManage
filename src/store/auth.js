@@ -1,12 +1,6 @@
 const state = {
-    name: '',
-    avatar: '',
-    mail: '',
-    sex: '',
-    type: '',
-    age: '',
-    phone: ''
-}
+
+};
 
 const mutations = {
 

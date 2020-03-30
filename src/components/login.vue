@@ -29,7 +29,11 @@
         },
         methods: {
             onSubmit(){
+                this.$store.dispatch("user/login", this.form).then(()=>{
+                }).catch(()=>{
 
+                });
+                this.$router.push("/content")
             }
         }
     }

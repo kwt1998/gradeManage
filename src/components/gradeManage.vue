@@ -2,7 +2,7 @@
     <div>
         <div class="searchHeader">
             <div class="searchLabel">
-                <el-select v-model="searchValue.season" clearable placeholder="学年">
+                <el-select v-model="searchValue.season" clearable placeholder="学年" @click.native="loadingSeason" :loading="seasonLoading">
                     <el-option
                             v-for="item in seasonOptions"
                             :key="item.value"
@@ -260,6 +260,7 @@
                 classLoading: false,
                 majorLoading: false,
                 departLoading: false,
+                seasonLoading: false,
                 pageMess: {
                     total:  0,
                     currentPage: 0,
@@ -282,9 +283,41 @@
                 this.tableData[index].gradeEditor = true;
             },
             handleDelete(index, row) {
-                this.tableData.splice(index, 1)
+                this.$confirm('确认删除此条记录？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios.post(
+                        'deleteGrade',
+                        row
+                    ).then(()=>{
+                        this.tableData.splice(index, 1);
+                        this.searchResult = this.tableData;
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch(()=>{
+                        this.$message.error("删除失败");
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+                this.tableData.splice(index, 1);
+                this.searchResult = this.tableData;
             },
             search() {
+                this.$axios.post(
+                    'gradeManageSearch',
+                    this.searchValue
+                ).then(response=>{
+                   this.searchResult = response;
+                   this.tableData = response;
+                });
                 this.searchResult = [{
                     sId: "161310719",
                     sName: "柯文涛",
@@ -456,11 +489,18 @@
                     }
                 }
                 if(isSave){
-                    row.gradeEditor = false;
-                    row.newColumnEditor = false;
-                    this.$message({
-                        message: '保存成功',
-                        type: 'success'
+                    this.$axios.post(
+                        'gradeManageSave',
+                        row
+                    ).then(()=>{
+                        row.gradeEditor = false;
+                        row.newColumnEditor = false;
+                        this.$message({
+                            message: '保存成功',
+                            type: 'success'
+                        });
+                    }).catch(()=>{
+                        this.$message.error('保存失败')
                     });
                 }
             },
@@ -476,17 +516,66 @@
                 })
                 this.tableData = filterTable;
             },
+
+            loadingSeason() {
+                this.seasonLoading = true;
+                this.$axios.post(
+                    'getSeasonOptions',
+                ).then(response=>{
+                    this.seasonOptions = response;
+                    this.seasonLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.seasonLoading = false;
+                    },5000)}
+                )
+            },
+
             loadingDepart() {
                 this.departLoading = true;
-                this.departLoading = false;
+                this.$axios.post(
+                    'getDepartOptions',
+                ).then(response=>{
+                    this.departOptions = response;
+                    this.departLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.departLoading = false;
+                    },5000)}
+                )
             },
             loadingMajor() {
                 this.majorLoading = true;
-                this.majorLoading = false;
+                this.$axios.post(
+                    'getMajorOptions',
+                    {
+                        major: this.searchValue.depart
+                    }
+                ).then(response=>{
+                    this.majorOptions = response;
+                    this.majorLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.majorLoading = false;
+                    },5000)}
+                )
             },
             loadingClass() {
                 this.classLoading = true;
-                this.classLoading = false;
+                this.$axios.post(
+                    'getClassOptions',
+                    {
+                        depart: this.searchValue.depart,
+                        major: this.searchValue.major,
+                    }
+                ).then(response=>{
+                    this.classOptions = response;
+                    this.classLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.classLoading = false;
+                    },5000)}
+                )
             },
 
             printTable() {

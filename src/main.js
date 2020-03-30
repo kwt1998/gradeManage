@@ -14,6 +14,17 @@ Vue.prototype.$axios = axios;
 Vue.use(ElementUI);
 Vue.use(Print);
 
+router.beforeEach((to,from,next)=>{
+  console.log(to);
+  if(localStorage.getItem('token') || to.path === "/login"){
+    next();
+  }else {
+    next({
+      path:'/login'
+    })
+  }
+});
+
 new Vue({
   render: h => h(App),
   router,

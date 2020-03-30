@@ -4,7 +4,7 @@
             <div class="searchLabel">
                 <el-select v-model="value" clearable placeholder="请选择">
                     <el-option
-                            v-for="item in options"
+                            v-for="item in seasonOptions"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value">
@@ -48,9 +48,8 @@
         name: "stuSearch",
         data() {
             return {
-                options: [{
-                    value: '选项1',
-                    label: '2020夏季'
+                seasonOptions: [{
+                    value: '2020夏季'
                 }],
                 value: '',
                 tableData: [],
@@ -60,12 +59,13 @@
         mounted() {
             this.$nextTick(() => {
                 this.tableHeight = window.innerHeight - 120;
-            })
+            });
             window.onresize = () => {
                 this.$nextTick(() => {
                     this.tableHeight = window.innerHeight - 120;
                 })
             }
+            this.getSeasonOptions()
         },
         methods: {
             handleEdit(index, row) {
@@ -75,6 +75,17 @@
                 console.log(index, row);
             },
             search() {
+                let season = this.value;
+                let userId = this.$store.getters.userId;
+                this.$axios.post(
+                    'gradeSearch',
+                    {
+                        season: season,
+                        userId: userId
+                    }
+                ).then(response=>{
+                    this.tableData = response;
+                });
                 this.tableData = [{
                     courseName: '数据库课程设计',
                     grade: '90',
@@ -152,6 +163,14 @@
                     grade: '90',
                     level: 'A'
                 }]
+            },
+
+            getSeasonOptions() {
+                this.$axios.post(
+                    'getSeasonOptions',
+                ).then(response=>{
+                    this.seasonOptions = response;
+                })
             }
         }
     }

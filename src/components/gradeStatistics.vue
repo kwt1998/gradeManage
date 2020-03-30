@@ -2,7 +2,7 @@
     <div>
         <div class="searchHeader">
             <div class="searchLabel">
-                <el-select v-model="searchValue.season" clearable placeholder="学年">
+                <el-select v-model="searchValue.season" clearable placeholder="学年" @click.native="loadingSeason" :loading="seasonLoading">
                     <el-option
                             v-for="item in seasonOptions"
                             :key="item.value"
@@ -87,6 +87,7 @@
                 classLoading: false,
                 majorLoading: false,
                 departLoading: false,
+                seasonLoading: false,
                 chartHeight: 0,
 
             }
@@ -105,22 +106,71 @@
         methods: {
 
             search() {
-                this.searchResult = []
+                this.$axios.post('gradeStatisticSearch', this.searchValue).then(response=>{
+                    this.searchResult = response;
+                }).catch()
+                this.searchResult = [];
             },
 
 
-
+            loadingSeason() {
+                this.seasonLoading = true;
+                this.$axios.post(
+                    'getSeasonOptions',
+                ).then(response=>{
+                    this.seasonOptions = response;
+                    this.seasonLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.seasonLoading = false;
+                    },5000)}
+                )
+            },
             loadingDepart() {
                 this.departLoading = true;
-                this.departLoading = false;
+                this.$axios.post(
+                    'getDepartOptions',
+                ).then(response=>{
+                    this.departOptions = response;
+                    this.departLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.departLoading = false;
+                    },5000)}
+                )
             },
             loadingMajor() {
                 this.majorLoading = true;
-                this.majorLoading = false;
+                this.$axios.post(
+                    'getDepartOptions',
+                    {
+                        depart: this.searchValue.depart
+                    }
+                ).then(response=>{
+                    this.majorOptions = response;
+                    this.majorLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.majorLoading = false;
+                    },5000)}
+                )
             },
             loadingClass() {
                 this.classLoading = true;
-                this.classLoading = false;
+                this.$axios.post(
+                    'getClassOptions',
+                    {
+                        depart: this.searchValue.depart,
+                        major: this.searchValue.major,
+                    }
+                ).then(response=>{
+                    this.classOptions = response;
+                    this.classLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.classLoading = false;
+                    },5000)}
+                )
             },
 
 
