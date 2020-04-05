@@ -78,7 +78,7 @@
                 let season = this.value;
                 let userId = this.$store.getters.userId;
                 this.$axios.post(
-                    'gradeSearch',
+                    '/api/gradeSearch',
                     {
                         season: season,
                         userId: userId
@@ -167,7 +167,7 @@
 
             getSeasonOptions() {
                 this.$axios.post(
-                    'getSeasonOptions',
+                    '/api/getSeasonOptions',
                 ).then(response=>{
                     this.seasonOptions = response;
                 })

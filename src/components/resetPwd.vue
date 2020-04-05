@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import qs from 'qs'
     export default {
         name: "resetPwd",
         data() {
@@ -36,11 +37,14 @@
                 let userId = this.$store.getters.username;
                 let newPwd = this.newPwd;
                 this.$axios.post(
-                    "resetPwd",
+                    "/api/resetPwd",
+                    // qs.stringify(
                     {
                         userId:userId,
                         newPwd:newPwd
-                    }).then(()=>{
+                    },
+                    // {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+                ).then(()=>{
                         this.$store.commit('SET_PASSWORD', newPwd);
                     }).catch(()=>{
 

@@ -289,7 +289,7 @@
                     type: 'warning'
                 }).then(() => {
                     this.$axios.post(
-                        'deleteGrade',
+                        '/api/deleteGrade',
                         row
                     ).then(()=>{
                         this.tableData.splice(index, 1);
@@ -312,7 +312,7 @@
             },
             search() {
                 this.$axios.post(
-                    'gradeManageSearch',
+                    '/api/gradeManageSearch',
                     this.searchValue
                 ).then(response=>{
                    this.searchResult = response;
@@ -490,7 +490,7 @@
                 }
                 if(isSave){
                     this.$axios.post(
-                        'gradeManageSave',
+                        '/api/gradeManageSave',
                         row
                     ).then(()=>{
                         row.gradeEditor = false;
@@ -520,7 +520,7 @@
             loadingSeason() {
                 this.seasonLoading = true;
                 this.$axios.post(
-                    'getSeasonOptions',
+                    '/api/getSeasonOptions',
                 ).then(response=>{
                     this.seasonOptions = response;
                     this.seasonLoading = false;
@@ -534,7 +534,7 @@
             loadingDepart() {
                 this.departLoading = true;
                 this.$axios.post(
-                    'getDepartOptions',
+                    '/api/getDepartOptions',
                 ).then(response=>{
                     this.departOptions = response;
                     this.departLoading = false;
@@ -547,7 +547,7 @@
             loadingMajor() {
                 this.majorLoading = true;
                 this.$axios.post(
-                    'getMajorOptions',
+                    '/api/getMajorOptions',
                     {
                         major: this.searchValue.depart
                     }
@@ -563,7 +563,7 @@
             loadingClass() {
                 this.classLoading = true;
                 this.$axios.post(
-                    'getClassOptions',
+                    '/api/getClassOptions',
                     {
                         depart: this.searchValue.depart,
                         major: this.searchValue.major,

@@ -5,7 +5,7 @@ const state = {
     userName: '',
     password: '',
     userType: '',
-
+    token: '',
 };
 
 const mutations = {
@@ -22,6 +22,11 @@ const mutations = {
         state.userType = userType
     },
 
+    SET_TOKEN: (state, token) => {
+        state.token = token
+    },
+
+
 };
 
 const actions = {
@@ -29,10 +34,10 @@ const actions = {
 // user login
     login: function ({dispatch, commit}, userInfo) {
         const {username, password} = userInfo;
-        localStorage.setItem("token", "1213");
         return new Promise((resolve, reject) => {
+            sessionStorage.setItem("token", "qwqwqw");
             this.$axios.post(
-                'login',
+                '/api/login',
                 {
                     username: username,
                     password: password,
@@ -41,6 +46,7 @@ const actions = {
                 commit('SET_USERNAME', response.username)
                 commit('SET_PASSWORD', response.password)
                 commit('SET_USERTYPE', response.userType)
+                commit('SET_TOKEN', response.token)
                 resolve()
             }).catch(error => {
                 reject(error)

@@ -106,7 +106,7 @@
         methods: {
 
             search() {
-                this.$axios.post('gradeStatisticSearch', this.searchValue).then(response=>{
+                this.$axios.post('/api/gradeStatisticSearch', this.searchValue).then(response=>{
                     this.searchResult = response;
                 }).catch()
                 this.searchResult = [];
@@ -116,7 +116,7 @@
             loadingSeason() {
                 this.seasonLoading = true;
                 this.$axios.post(
-                    'getSeasonOptions',
+                    '/api/getSeasonOptions',
                 ).then(response=>{
                     this.seasonOptions = response;
                     this.seasonLoading = false;
@@ -129,7 +129,7 @@
             loadingDepart() {
                 this.departLoading = true;
                 this.$axios.post(
-                    'getDepartOptions',
+                    '/api/getDepartOptions',
                 ).then(response=>{
                     this.departOptions = response;
                     this.departLoading = false;
@@ -142,7 +142,7 @@
             loadingMajor() {
                 this.majorLoading = true;
                 this.$axios.post(
-                    'getDepartOptions',
+                    '/api/getDepartOptions',
                     {
                         depart: this.searchValue.depart
                     }
@@ -158,7 +158,7 @@
             loadingClass() {
                 this.classLoading = true;
                 this.$axios.post(
-                    'getClassOptions',
+                    '/api/getClassOptions',
                     {
                         depart: this.searchValue.depart,
                         major: this.searchValue.major,

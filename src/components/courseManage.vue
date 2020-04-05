@@ -99,7 +99,7 @@
                     type: 'warning'
                 }).then(() => {
                     this.$axios.post(
-                        'deleteCourse',
+                        '/api/deleteCourse',
                         {
                             course: row.course
                         }
@@ -122,156 +122,16 @@
             },
             search() {
                 this.$axios.post(
-                    'getAllCourse',
+                    '/api/getAllCourse',
+                    null,
+                    {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 ).then(response=>{
-                    this.searchResult = response;
+                    console.log("success")
+                    this.searchResult = response.data;
+                    this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
+                    this.pageMess.total = response.length;
+                    console.log(response.data);
                 });
-                this.searchResult = [{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "90",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "91",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "92",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "93",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "94",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "95",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "96",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "97",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "98",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "99",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "100",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "101",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "102",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                }];
-                this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
-                this.pageMess.total = 100
             },
             addColumn() {
                 this.tableData.unshift( {
@@ -291,7 +151,7 @@
                 }
                 if(isSave){
                     this.$axios.post(
-                        'courseManageSave',
+                        '/api/courseManageSave',
                         {
                             course: row.course
                         }

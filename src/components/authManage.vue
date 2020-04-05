@@ -101,7 +101,7 @@
                     type: 'warning'
                 }).then(() => {
                     this.$axios.post(
-                        'deleteAuth',
+                        '/api/deleteAuth',
                         row
                     ).then(()=>{
                         this.tableData.splice(index, 1);
@@ -122,7 +122,7 @@
             },
             search() {
                 this.$axios.post(
-                    'authSearch',
+                    '/api/authSearch',
                 ).then(response=>{
                     this.searchResult = response;
                     this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
@@ -156,7 +156,7 @@
                 if(isSave){
                     let tableData = this.tableData;
                     this.$axios.post(
-                        'authManageSave',
+                        '/api/authManageSave',
                         row
                     ).then(()=>{
                         row.gradeEditor = false;

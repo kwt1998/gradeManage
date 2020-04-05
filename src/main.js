@@ -14,9 +14,11 @@ Vue.prototype.$axios = axios;
 Vue.use(ElementUI);
 Vue.use(Print);
 
+// axios.defaults.baseURL = 'localhost:9000/grade'
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 router.beforeEach((to,from,next)=>{
   console.log(to);
-  if(localStorage.getItem('token') || to.path === "/login"){
+  if(sessionStorage.getItem('token') || to.path === "/login"){
     next();
   }else {
     next({
