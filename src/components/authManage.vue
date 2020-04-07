@@ -108,6 +108,10 @@
                 this.tableData[index].gradeEditor = true;
             },
             handleDelete(index, row) {
+                if(this.$store.getters.adminManageAuth === 'false'){
+                    this.$message.error('当前用户没有课程管理权限')
+                    return;
+                }
                 this.$confirm('确认删除此条记录？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -158,6 +162,10 @@
 
             },
             addColumn() {
+                if(this.$store.getters.adminManageAuth === 'false'){
+                    this.$message.error('当前用户没有管理员管理权限')
+                    return;
+                }
                 this.tableData.unshift( {
                     aname: "",
                     auth: [],
@@ -165,6 +173,10 @@
                 })
             },
             save(index, row) {
+                if(this.$store.getters.adminManageAuth === 'false'){
+                    this.$message.error('当前用户没有课程管理权限')
+                    return;
+                }
                 let isSave = true;
                 for(let key in row){
                     if(row[key] === ""){

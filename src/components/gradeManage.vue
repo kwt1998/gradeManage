@@ -284,6 +284,10 @@
                 this.tableData[index].gradeEditor = true;
             },
             handleDelete(index, row) {
+                if(this.$store.getters.changeOrDelGradeAuth === 'false'){
+                    this.$message.error('当前用户没有删除成绩权限')
+                    return;
+                }
                 this.$confirm('确认删除此条记录？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -324,6 +328,10 @@
                 });
             },
             addColumn() {
+                if(this.$store.getters.updateGradeAuth === 'false'){
+                    this.$message.error('当前用户没有上传成绩权限')
+                    return;
+                }
                 this.tableData.unshift( {
                     sid: "",
                     sname: "",
@@ -348,7 +356,10 @@
                     }
                 }
                 if(isSave){
-                    // if(this.$store.getters.)
+                    if(this.$store.getters.changeOrDelGradeAuth === 'false'){
+                        this.$message.error('当前用户没有修改成绩权限')
+                        return;
+                    }
                     this.$axios.post(
                         '/api/gradeManageSave',
                         this.qs.stringify(row),

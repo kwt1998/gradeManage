@@ -43,7 +43,6 @@
                     this.$store.commit('user/SET_USERNAME', response.data[0].aname);
                     this.$store.commit('user/SET_PASSWORD', response.data[0].password);
                     this.$store.commit('user/SET_USERTYPE', response.data[0].usertype);
-                    console.log(this.$store.getters.userType)
                     this.$store.commit('auth/SET_updateGradeAuth', response.data[0].updateGradeAuth)
                     this.$store.commit('auth/SET_changeOrDelGradeAuth', response.data[0].changeOrDelGradeAuth)
                     this.$store.commit('auth/SET_courseManageAuth', response.data[0].courseManageAuth)
