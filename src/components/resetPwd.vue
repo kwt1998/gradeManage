@@ -34,18 +34,19 @@
         },
         methods: {
             resetPwd() {
-                let userId = this.$store.getters.username;
+                let userName = this.$store.getters.userName;
                 let newPwd = this.newPwd;
+                let oldPwd = this.oldPwd;
                 this.$axios.post(
                     "/api/resetPwd",
-                    // qs.stringify(
-                    {
-                        userId:userId,
-                        newPwd:newPwd
-                    },
-                    // {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+                    qs.stringify({
+                        oldPwd:oldPwd,
+                        newPwd:newPwd,
+                        userName: userName,
+                    }),
+                    {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 ).then(()=>{
-                        this.$store.commit('SET_PASSWORD', newPwd);
+                        this.$store.commit('user/SET_PASSWORD', newPwd);
                     }).catch(()=>{
 
                 })

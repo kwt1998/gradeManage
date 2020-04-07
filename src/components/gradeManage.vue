@@ -5,35 +5,35 @@
                 <el-select v-model="searchValue.season" clearable placeholder="学年" @click.native="loadingSeason" :loading="seasonLoading">
                     <el-option
                             v-for="item in seasonOptions"
-                            :key="item.value"
+                            :key="item.season"
                             :label="item.label"
-                            :value="item.value"
+                            :value="item.season"
                     >
                     </el-option>
                 </el-select>
                 <el-select v-model="searchValue.depart" clearable placeholder="系" @click.native="loadingDepart" :loading="departLoading">
                     <el-option
                             v-for="item in departOptions"
-                            :key="item.value"
+                            :key="item.depart"
                             :label="item.label"
-                            :value="item.value"
+                            :value="item.depart"
                     >
                     </el-option>
                 </el-select>
                 <el-select v-model="searchValue.major" clearable placeholder="专业" @click.native="loadingMajor()" :loading="majorLoading">
                     <el-option
                             v-for="item in majorOptions"
-                            :key="item.value"
+                            :key="item.major"
                             :label="item.label"
-                            :value="item.value">
+                            :value="item.major">
                     </el-option>
                 </el-select>
-                <el-select v-model="searchValue.class" clearable placeholder="班级" @click.native="loadingClass()" :loading="classLoading">
+                <el-select v-model="searchValue.classid" clearable placeholder="班级" @click.native="loadingClass()" :loading="classLoading">
                     <el-option
                             v-for="item in classOptions"
-                            :key="item.value"
+                            :key="item.classid"
                             :label="item.label"
-                            :value="item.value">
+                            :value="item.classid">
                     </el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" style="margin-left: 20px" @click="search()">查询</el-button>
@@ -58,7 +58,7 @@
                    >
                 <el-table-column
                         label="学号"
-                        prop="sId"
+                        prop="sid"
                         align="center"
                 >
                     <template slot="header" slot-scope="scope">
@@ -77,13 +77,13 @@
                         </el-row>
                     </template>
                     <template slot-scope="scope" >
-                        <el-input v-if="scope.row.newColumnEditor" v-model="scope.row.sId"  @blur="save()"></el-input>
-                        <span v-else>{{ scope.row.sId}}</span>
+                        <el-input v-if="scope.row.newColumnEditor" v-model="scope.row.sid"  @blur="save()"></el-input>
+                        <span v-else>{{ scope.row.sid}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                         label="姓名"
-                        prop="sName"
+                        prop="sname"
                         align="center">
                     <template slot="header" slot-scope="scope">
                         <el-row >
@@ -101,8 +101,8 @@
                         </el-row>
                     </template>
                     <template slot-scope="scope" >
-                        <el-input v-if="scope.row.newColumnEditor" v-model="scope.row.sName"></el-input>
-                        <span v-else>{{ scope.row.sName}}</span>
+                        <el-input v-if="scope.row.newColumnEditor" v-model="scope.row.sname"></el-input>
+                        <span v-else>{{ scope.row.sname}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -111,12 +111,12 @@
                         align="center"
                 >
                     <template slot-scope="scope" >
-                        <el-select  v-if="scope.row.newColumnEditor" v-model="scope.row.depart" clearable placeholder="系">
+                        <el-select  v-if="scope.row.newColumnEditor" v-model="scope.row.depart" clearable placeholder="系" @click.native="loadingDepart" :loading="departLoading">
                             <el-option
                                     v-for="item in departOptions"
-                                    :key="item.value"
-                                    :label="item.value"
-                                    :value="item.value">
+                                    :key="item.depart"
+                                    :label="item.depart"
+                                    :value="item.depart">
                             </el-option>
                         </el-select>
                         <span v-else>{{ scope.row.depart}}</span>
@@ -128,12 +128,12 @@
                         align="center"
                 >
                     <template slot-scope="scope" >
-                        <el-select  v-if="scope.row.newColumnEditor" v-model="scope.row.major" clearable placeholder="专业">
+                        <el-select  v-if="scope.row.newColumnEditor" v-model="scope.row.major" clearable placeholder="专业" @click.native="loadingRowMajor(scope.row)" :loading="majorLoading">
                             <el-option
                                     v-for="item in majorOptions"
-                                    :key="item.value"
-                                    :label="item.value"
-                                    :value="item.value">
+                                    :key="item.major"
+                                    :label="item.major"
+                                    :value="item.major">
                             </el-option>
                         </el-select>
                         <span v-else>{{ scope.row.major}}</span>
@@ -145,15 +145,15 @@
                         align="center"
                 >
                     <template slot-scope="scope" >
-                        <el-select  v-if="scope.row.newColumnEditor" v-model="scope.row.class" clearable placeholder="班级">
+                        <el-select  v-if="scope.row.newColumnEditor" v-model="scope.row.classid" clearable placeholder="班级" @click.native="loadingRowClass(scope.row)" :loading="classLoading">
                             <el-option
                                     v-for="item in classOptions"
-                                    :key="item.value"
-                                    :label="item.value"
-                                    :value="item.value">
+                                    :key="item.classid"
+                                    :label="item.classid"
+                                    :value="item.classid">
                             </el-option>
                         </el-select>
-                        <span v-else>{{ scope.row.class}}</span>
+                        <span v-else>{{ scope.row.classid}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -162,12 +162,12 @@
                         align="center"
                 >
                     <template slot-scope="scope" >
-                        <el-select  v-if="scope.row.newColumnEditor" v-model="scope.row.course" clearable placeholder="课程">
+                        <el-select  v-if="scope.row.newColumnEditor" v-model="scope.row.course" clearable placeholder="课程" @click.native="loadingCourse" :loading="couseLoading">
                             <el-option
                                     v-for="item in courseOptions"
-                                    :key="item.value"
-                                    :label="item.value"
-                                    :value="item.value">
+                                    :key="item.course"
+                                    :label="item.course"
+                                    :value="item.course">
                             </el-option>
                         </el-select>
                         <span v-else>{{ scope.row.course}}</span>
@@ -179,12 +179,12 @@
                         align="center"
                 >
                     <template slot-scope="scope" >
-                        <el-select  v-if="scope.row.newColumnEditor" v-model="scope.row.season" clearable placeholder="学年">
+                        <el-select  v-if="scope.row.newColumnEditor" v-model="scope.row.season" clearable placeholder="学年" @click.native="loadingSeason" :loading="SeasonLoading">
                             <el-option
                                     v-for="item in seasonOptions"
-                                    :key="item.value"
-                                    :label="item.value"
-                                    :value="item.value">
+                                    :key="item.season"
+                                    :label="item.season"
+                                    :value="item.season">
                             </el-option>
                         </el-select>
                         <span v-else>{{ scope.row.season}}</span>
@@ -231,19 +231,19 @@
         data() {
             return{
                 seasonOptions: [{
-                    value: '2020夏季',
+
                 }],
                 majorOptions:[{
-                    value: "软件工程"
+
                 }],
                 classOptions: [{
-                    value: "1601"
+
                 }],
                 departOptions: [{
-                    value: "计算机"
+
                 }],
                 courseOptions: [{
-                    value: "数据库课程设计"
+
                 }],
 
                 searchValue: {
@@ -261,6 +261,7 @@
                 majorLoading: false,
                 departLoading: false,
                 seasonLoading: false,
+                courseLoading: false,
                 pageMess: {
                     total:  0,
                     currentPage: 0,
@@ -290,7 +291,8 @@
                 }).then(() => {
                     this.$axios.post(
                         '/api/deleteGrade',
-                        row
+                        row,
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                     ).then(()=>{
                         this.tableData.splice(index, 1);
                         this.searchResult = this.tableData;
@@ -313,168 +315,25 @@
             search() {
                 this.$axios.post(
                     '/api/gradeManageSearch',
-                    this.searchValue
+                    this.qs.stringify(this.searchValue),
+                    {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 ).then(response=>{
-                   this.searchResult = response;
-                   this.tableData = response;
+                   this.searchResult = response.data;
+                    this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
+                    this.pageMess.total = response.data.length;
                 });
-                this.searchResult = [{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "90",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "91",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "92",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "93",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "94",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "95",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "96",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "97",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "98",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "99",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "100",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "101",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                },{
-                    sId: "161310719",
-                    sName: "柯文涛",
-                    depart: "计算机",
-                    major: "软件工程",
-                    class: "1601",
-                    course: "数据库课程设计",
-                    season: "2020年夏",
-                    grade: "102",
-                    gradeEditor: false,
-                    newColumnEditor: false
-                }];
-                this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
-                this.pageMess.total = 100
             },
             addColumn() {
                 this.tableData.unshift( {
-                    sId: "",
-                    sName: "",
+                    sid: "",
+                    sname: "",
                     depart: "",
                     major: "",
-                    class: "",
+                    classid: "",
                     course: "",
                     season: "",
                     grade: "",
+                    level: "A",
                     newColumnEditor: true,
                     gradeEditor: true,
                 })
@@ -489,9 +348,11 @@
                     }
                 }
                 if(isSave){
+                    // if(this.$store.getters.)
                     this.$axios.post(
                         '/api/gradeManageSave',
-                        row
+                        this.qs.stringify(row),
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                     ).then(()=>{
                         row.gradeEditor = false;
                         row.newColumnEditor = false;
@@ -506,13 +367,13 @@
             },
             idFilter(value) {
                 let filterTable = this.searchResult.filter(function (row) {
-                    return row.sId.search(value) !== -1;
+                    return row.sid.search(value) !== -1;
                 })
                 this.tableData = filterTable;
             },
             nameFilter(value) {
                 let filterTable = this.searchResult.filter(function (row) {
-                    return row.sName.search(value) !== -1;
+                    return row.sname.search(value) !== -1;
                 })
                 this.tableData = filterTable;
             },
@@ -522,8 +383,22 @@
                 this.$axios.post(
                     '/api/getSeasonOptions',
                 ).then(response=>{
-                    this.seasonOptions = response;
+                    this.seasonOptions = response.data;
                     this.seasonLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.seasonLoading = false;
+                    },5000)}
+                )
+            },
+
+            loadingCourse() {
+                this.classLoading = true;
+                this.$axios.post(
+                    '/api/getAllCourse',
+                ).then(response=>{
+                    this.courseOptions = response.data;
+                    this.courseLoading = false;
                 }).catch( error=> {
                     setTimeout(()=>{
                         this.seasonLoading = false;
@@ -536,7 +411,7 @@
                 this.$axios.post(
                     '/api/getDepartOptions',
                 ).then(response=>{
-                    this.departOptions = response;
+                    this.departOptions = response.data;
                     this.departLoading = false;
                 }).catch( error=> {
                     setTimeout(()=>{
@@ -548,11 +423,12 @@
                 this.majorLoading = true;
                 this.$axios.post(
                     '/api/getMajorOptions',
-                    {
-                        major: this.searchValue.depart
-                    }
+                    this.qs.stringify({
+                        depart: this.searchValue.depart
+                    }),
+                    {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 ).then(response=>{
-                    this.majorOptions = response;
+                    this.majorOptions = response.data;
                     this.majorLoading = false;
                 }).catch( error=> {
                     setTimeout(()=>{
@@ -560,16 +436,55 @@
                     },5000)}
                 )
             },
+
+            loadingRowMajor(row) {
+                this.majorLoading = true;
+                this.$axios.post(
+                    '/api/getMajorOptions',
+                    this.qs.stringify({
+                        depart: row.depart
+                    }),
+                    {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+                ).then(response=>{
+                    this.majorOptions = response.data;
+                    this.majorLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.majorLoading = false;
+                    },5000)}
+                )
+            },
+
             loadingClass() {
                 this.classLoading = true;
                 this.$axios.post(
                     '/api/getClassOptions',
-                    {
+                    this.qs.stringify({
                         depart: this.searchValue.depart,
                         major: this.searchValue.major,
-                    }
+                    }),
+                    {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 ).then(response=>{
-                    this.classOptions = response;
+                    this.classOptions = response.data;
+                    this.classLoading = false;
+                }).catch( error=> {
+                    setTimeout(()=>{
+                        this.classLoading = false;
+                    },5000)}
+                )
+            },
+
+            loadingRowClass(row) {
+                this.classLoading = true;
+                this.$axios.post(
+                    '/api/getClassOptions',
+                    this.qs.stringify({
+                        depart: row.depart,
+                        major: row.major,
+                    }),
+                    {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+                ).then(response=>{
+                    this.classOptions = response.data;
                     this.classLoading = false;
                 }).catch( error=> {
                     setTimeout(()=>{

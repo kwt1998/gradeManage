@@ -35,29 +35,36 @@ const actions = {
     login: function ({dispatch, commit}, userInfo) {
         const {username, password} = userInfo;
         return new Promise((resolve, reject) => {
-            sessionStorage.setItem("token", "qwqwqw");
+            console.log(this)
             this.$axios.post(
                 '/api/login',
-                {
+                this.qs.stringify({
                     username: username,
                     password: password,
-                }
+                }),
+                {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
             ).then(response => {
-                commit('SET_USERNAME', response.username)
-                commit('SET_PASSWORD', response.password)
-                commit('SET_USERTYPE', response.userType)
-                commit('SET_TOKEN', response.token)
+                commit('SET_USERNAME', response.data.username);
+                commit('SET_PASSWORD', response.data.password);
+                commit('SET_USERTYPE', response.data.userType);
+
+                sessionStorage.setItem("token", "qwqwqw");
+                // this.$store.dispatch("auth/getAuth", userInfo).then(() => {
+                //     resolve();
+                // }).catch((e)=>{
+                //
+                // });
                 resolve()
             }).catch(error => {
                 reject(error)
             })
         })
     }
-    ,
+}
 
 
 // user logout
-    logout({commit, state}) {
+//     logout({commit, state}) {
         // while (constantRoutes.options.routes.length >= 2) {
         //     constantRoutes.options.routes.pop()
         // }
@@ -67,8 +74,8 @@ const actions = {
         //     resetRouter()
         //     resolve()
         // })
-    }
-    ,
+    // }
+    // ,
 
 // remove token
 //     resetToken({commit}) {
@@ -78,7 +85,7 @@ const actions = {
 //             resolve()
 //         })
 //     }
-}
+// }
 
 export default {
     namespaced: true,

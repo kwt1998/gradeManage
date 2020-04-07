@@ -1,33 +1,48 @@
 const state = {
-
+    updateGradeAuth: false,
+    changeOrDelGradeAuth: false,
+    courseManageAuth: false,
+    adminManageAuth: false,
 };
 
 const mutations = {
 
-    SET_NAME: (state, name) => {
-        state.name = name
+    SET_updateGradeAuth: (state, updateGradeAuth) => {
+        state.updateGradeAuth = updateGradeAuth
     },
-    SET_AVATAR: (state, avatar) => {
-        state.avatar = avatar
+    SET_changeOrDelGradeAuth: (state, changeOrDelGradeAuth) => {
+        state.changeOrDelGradeAuth = changeOrDelGradeAuth
     },
-    SET_TYPE: (state, type) => {
-        state.type = type
+    SET_courseManageAuth: (state, courseManageAuth) => {
+        state.courseManageAuth = courseManageAuth
     },
-    SET_MAIL: (state, mail) => {
-        state.mail = mail
+    SET_adminManageAuth: (state, adminManageAuth) => {
+        state.adminManageAuth = adminManageAuth
     },
-    SET_SEX: (state, sex) => {
-        state.sex = sex
-    },
-    SET_AGE: (state, age) => {
-        state.age = age
-    },
-    SET_PHONE: (state, phone) => {
-        state.phone = phone
-    }
-}
+};
 
-const actions = {}
+const actions = {
+    getAuth: function ({dispatch, commit}, userInfo) {
+        const {username, password} = userInfo;
+        return new Promise((resolve, reject) => {
+            this.$axios.post(
+                '/api/getAuth',
+                {
+                    username: username,
+                },
+                {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+            ).then(response => {
+                commit('SET_updateGradeAuth', response.data.updateGradeAuth)
+                commit('SET_changeOrDelGradeAuth', response.data.changeOrDelGradeAuth)
+                commit('SET_courseManageAuth', response.data.courseManageAuth)
+                commit('SET_adminManageAuth', response.data.adminManageAuth)
+                resolve()
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+};
 
 export default {
     namespaced: true,

@@ -42,10 +42,6 @@
                                 size="mini"
                                 @click="save(scope.$index, scope.row)">保存</el-button>
                         <el-button
-                                v-else
-                                size="mini"
-                                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button
                                 size="mini"
                                 type="danger"
                                 @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -57,7 +53,7 @@
 </template>
 
 <script>
-
+    import qs from 'qs'
     export default {
         name: "courseManage",
         data() {
@@ -100,9 +96,10 @@
                 }).then(() => {
                     this.$axios.post(
                         '/api/deleteCourse',
-                        {
+                        qs.stringify({
                             course: row.course
-                        }
+                        }),
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                     ).then(()=>{
                         this.tableData.splice(index, 1);
                         this.searchResult = this.tableData;
@@ -126,11 +123,10 @@
                     null,
                     {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 ).then(response=>{
-                    console.log("success")
+                    // console.log("success")
                     this.searchResult = response.data;
                     this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
-                    this.pageMess.total = response.length;
-                    console.log(response.data);
+                    this.pageMess.total = response.data.length;
                 });
             },
             addColumn() {
@@ -152,9 +148,10 @@
                 if(isSave){
                     this.$axios.post(
                         '/api/courseManageSave',
-                        {
+                        qs.stringify({
                             course: row.course
-                        }
+                        }),
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                     ).then(()=>{
                         row.gradeEditor = false;
                         row.newColumnEditor = false;
@@ -162,7 +159,6 @@
                             message: '保存成功',
                             type: 'success'
                         });
-                        this.searchResult = tableData;
                     }).catch(()=>{
                         this.$message.error("保存失败");
                     });

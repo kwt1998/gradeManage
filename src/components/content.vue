@@ -37,20 +37,29 @@
         data() {
             return {
                 asideMenu: {
-                    stuSearch: "成绩查询",
-                    resetPwd: "重置密码",
-                    gradeManage: "成绩管理",
-                    courseManage: "课程管理",
-                    gradeStatistics: "成绩统计",
-                    authManage: "权限管理"
                 },
-                username: "161310719",
+                username: this.$store.getters.userName,
             }
         },
         methods: {
 
         },
         mounted() {
+            let userType = this.$store.getters.userType;
+            if(userType === 1 ){
+                this.asideMenu = {
+                    stuSearch: "成绩查询",
+                    resetPwd: "重置密码",
+                }
+            }else if(userType === 2){
+                this.asideMenu = {
+                    gradeManage: "成绩管理",
+                    courseManage: "课程管理",
+                    gradeStatistics: "成绩统计",
+                    authManage: "权限管理",
+                    resetPwd: "重置密码",
+                }
+            }
         }
     }
 </script>

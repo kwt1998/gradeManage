@@ -25,10 +25,10 @@
                         align="center"
                 >
                     <template slot-scope="scope" >
-                        <el-input  v-if="scope.row.newColumnEditor" v-model="scope.row.name" clearable placeholder="管理员名">
+                        <el-input  v-if="scope.row.newColumnEditor" v-model="scope.row.aname" clearable placeholder="管理员名">
 
                         </el-input>
-                        <span v-else>{{ scope.row.name}}</span>
+                        <span v-else>{{ scope.row.aname}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -39,7 +39,7 @@
                 >
                     <template slot-scope="scope" >
                         <el-checkbox-group   v-model="scope.row.auth">
-                            <el-checkbox v-for="auth in authOptions" :label="auth" :key="auth">{{auth}}</el-checkbox>
+                            <el-checkbox v-for="auth in authOptions" :label="auth.label" :key="auth.value">{{auth.label}}</el-checkbox>
                         </el-checkbox-group>
                     </template>
                 </el-table-column>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-
+    import qs from "qs"
     export default {
         name: "authManage",
         data() {
@@ -76,7 +76,20 @@
                     currentPage: 0,
                     pageSize: 10,
                 },
-                authOptions: ['上传成绩', '修改、删除成绩', '课程管理', '管理员管理'],
+                authOptions: [
+                    {
+                        label: '上传成绩',
+                        value: 'updateGradeAuth'
+                    }, {
+                        label: '修改、删除成绩',
+                        value: 'changeOrDelGradeAuth'
+                    }, {
+                        label: '课程管理',
+                        value: 'courseManageAuth'
+                    }, {
+                        label: '管理员管理',
+                        value: 'adminManageAuth'
+                    }],
             }
         },
         mounted() {
@@ -102,7 +115,10 @@
                 }).then(() => {
                     this.$axios.post(
                         '/api/deleteAuth',
-                        row
+                        this.qs.stringify({
+                            name: row.aname
+                        }),
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                     ).then(()=>{
                         this.tableData.splice(index, 1);
                         this.searchResult = this.tableData;
@@ -124,22 +140,26 @@
                 this.$axios.post(
                     '/api/authSearch',
                 ).then(response=>{
-                    this.searchResult = response;
+                    response.data.forEach((item ,index) => {
+                        let auth = [];
+                        item.updateGradeAuth === 'true' ? auth.push('上传成绩') : null;
+                        item.changeOrDelGradeAuth === 'true' ? auth.push('修改、删除成绩') : null;
+                        item.courseManageAuth === 'true' ? auth.push('课程管理') : null;
+                        item.adminManageAuth === 'true' ? auth.push('管理员管理') : null;
+                        this.searchResult.push({
+                            aname: item.aname,
+                            auth: auth
+                        })
+                    });
+                    // console.log(this.searchResult);
                     this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
-                    this.pageMess.total = response.length;
+                    this.pageMess.total = response.data.length;
                 }).catch()
-                // this.searchResult = [{
-                //     name: '11',
-                //     auth: ['上传成绩', '修改、删除成绩'],
-                //     newColumnEditor:false,
-                // }];
-                // this.tableData = this.searchResult.slice(0, this.pageMess.pageSize);
-                // this.pageMess.total = 100
 
             },
             addColumn() {
                 this.tableData.unshift( {
-                    name: "",
+                    aname: "",
                     auth: [],
                     newColumnEditor: true,
                 })
@@ -157,7 +177,14 @@
                     let tableData = this.tableData;
                     this.$axios.post(
                         '/api/authManageSave',
-                        row
+                        qs.stringify({
+                            name: row.aname,
+                            updateGradeAuth: row.auth.indexOf('上传成绩') !== -1,
+                            changeOrDelGradeAuth: row.auth.indexOf('修改、删除成绩') !== -1,
+                            courseManageAuth: row.auth.indexOf('课程管理') !== -1,
+                            adminManageAuth: row.auth.indexOf('管理员管理') !== -1,
+                        }),
+                        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                     ).then(()=>{
                         row.gradeEditor = false;
                         row.newColumnEditor = false;

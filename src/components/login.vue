@@ -29,11 +29,36 @@
         },
         methods: {
             onSubmit(){
-                this.$store.dispatch("user/login", this.form).then(()=>{
-                }).catch(()=>{
+                // this.$store.dispatch("user/login", this.form).then(()=>{
+                // }).catch((e)=>{
+                // });
+                this.$axios.post(
+                    '/api/login',
+                    this.qs.stringify({
+                        username: this.form.name,
+                        password: this.form.password,
+                    }),
+                    {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+                ).then(response => {
+                    this.$store.commit('user/SET_USERNAME', response.data[0].aname);
+                    this.$store.commit('user/SET_PASSWORD', response.data[0].password);
+                    this.$store.commit('user/SET_USERTYPE', response.data[0].usertype);
+                    console.log(this.$store.getters.userType)
+                    this.$store.commit('auth/SET_updateGradeAuth', response.data[0].updateGradeAuth)
+                    this.$store.commit('auth/SET_changeOrDelGradeAuth', response.data[0].changeOrDelGradeAuth)
+                    this.$store.commit('auth/SET_courseManageAuth', response.data[0].courseManageAuth)
+                    this.$store.commit('auth/SET_adminManageAuth', response.data[0].adminManageAuth)
+                    sessionStorage.setItem("token", "qwqwqw");
+
+                    // this.$store.dispatch("auth/getAuth", userInfo).then(() => {
+                    //     resolve();
+                    // }).catch((e)=>{
+                    //
+                    // });
+                    this.$router.push("/content")
+                }).catch(error => {
 
                 });
-                this.$router.push("/content")
             }
         }
     }

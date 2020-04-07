@@ -5,9 +5,9 @@
                 <el-select v-model="value" clearable placeholder="请选择">
                     <el-option
                             v-for="item in seasonOptions"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            :key="item.season"
+                            :label="item.season"
+                            :value="item.season">
                     </el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" style="margin-left: 20px" @click="search()">查询
@@ -48,9 +48,7 @@
         name: "stuSearch",
         data() {
             return {
-                seasonOptions: [{
-                    value: '2020夏季'
-                }],
+                seasonOptions: [],
                 value: '',
                 tableData: [],
                 tableHeight: 0
@@ -79,12 +77,13 @@
                 let userId = this.$store.getters.userId;
                 this.$axios.post(
                     '/api/gradeSearch',
-                    {
+                    this.qs.stringify({
                         season: season,
-                        userId: userId
-                    }
+                        userId: '161310719'
+                    }),
+                    {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 ).then(response=>{
-                    this.tableData = response;
+                    this.tableData = response.data;
                 });
                 this.tableData = [{
                     courseName: '数据库课程设计',
@@ -169,7 +168,7 @@
                 this.$axios.post(
                     '/api/getSeasonOptions',
                 ).then(response=>{
-                    this.seasonOptions = response;
+                    this.seasonOptions = response.data;
                 })
             }
         }

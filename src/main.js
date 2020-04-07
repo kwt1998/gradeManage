@@ -7,8 +7,10 @@ import  router from './router/index'
 import store from './store'
 import Print from 'vue-print-nb'
 import echarts from "echarts";
+import qs from 'qs'
 
 Vue.prototype.$echarts = echarts;
+Vue.prototype.qs = qs;
 Vue.config.productionTip = false;
 Vue.prototype.$axios = axios;
 Vue.use(ElementUI);
@@ -17,7 +19,7 @@ Vue.use(Print);
 // axios.defaults.baseURL = 'localhost:9000/grade'
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 router.beforeEach((to,from,next)=>{
-  console.log(to);
+  // console.log(to);
   if(sessionStorage.getItem('token') || to.path === "/login"){
     next();
   }else {
