@@ -34,7 +34,7 @@
         },
         methods: {
             resetPwd() {
-                let userName = this.$store.getters.userName;
+                let userId = this.$store.getters.userName;
                 let newPwd = this.newPwd;
                 let oldPwd = this.oldPwd;
                 this.$axios.post(
@@ -42,11 +42,15 @@
                     qs.stringify({
                         oldPwd:oldPwd,
                         newPwd:newPwd,
-                        userName: userName,
+                        userId: userId,
                     }),
                     {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 ).then(()=>{
                         this.$store.commit('user/SET_PASSWORD', newPwd);
+                        this.$message({
+                            type: 'success',
+                            message: '修改成功!'
+                        });
                     }).catch(()=>{
 
                 })

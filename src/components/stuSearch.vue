@@ -22,7 +22,7 @@
 
                 <el-table-column
                         label="课程名"
-                        prop="courseName"
+                        prop="course"
                         width="400px"
                         align="center">
                 </el-table-column>
@@ -74,94 +74,18 @@
             },
             search() {
                 let season = this.value;
-                let userId = this.$store.getters.userId;
+                let userId = this.$store.getters.userName;
                 this.$axios.post(
                     '/api/gradeSearch',
                     this.qs.stringify({
                         season: season,
-                        userId: '161310719'
+                        userId: userId
                     }),
                     {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 ).then(response=>{
                     this.tableData = response.data;
                 });
-                this.tableData = [{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                },{
-                    courseName: '数据库课程设计',
-                    grade: '90',
-                    level: 'A'
-                }]
+                this.tableData = []
             },
 
             getSeasonOptions() {

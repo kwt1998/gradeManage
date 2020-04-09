@@ -3,7 +3,7 @@
         <aside class="aside">
             <div class="asideTop">
                 <div class ="user">
-                    <div class="userHead"></div>
+                    <div class="userHead"> <img style="width: 80%; height: 80%" src="../assets/user.svg"></div>
                     {{username}}
                 </div>
             </div>
@@ -90,17 +90,17 @@
     }
 
     .user {
-        width: 120px;
+        width: 100px;
         height: 150px;
         position: absolute;
         top: 30px;
-        left: calc(50% - 60px);
+        left: calc(50% - 50px);
         text-align: center;
     }
 
     .userHead {
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
         background-color: white;
         border: 1px solid #3a8ee6;
         border-radius: 100%;

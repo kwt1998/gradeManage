@@ -38,8 +38,18 @@
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" style="margin-left: 20px" @click="search()">查询</el-button>
                 <el-button type="primary"  style="margin-left: 20px" @click="addColumn()">新增</el-button>
-                <el-button type="info"  style="margin-left: 20px" @click="leadingIn()">批量导入</el-button>
                 <el-button type="info"  style="margin-left: 20px"  v-print="'#print'">打印</el-button>
+                <el-upload
+                        style="display: inline"
+                        class="upload-demo"
+                        action="/api/UploadServlet"
+                        :on-preview="handlePreview"
+                        :on-success='upLoadSuccess'
+                        :limit="1"
+                        :file-list="fileList"
+                        >
+                    <el-button type="info"  style="margin-left: 20px">批量导入</el-button>
+                </el-upload>
             </div>
         </div>
         <el-pagination
@@ -77,7 +87,7 @@
                         </el-row>
                     </template>
                     <template slot-scope="scope" >
-                        <el-input v-if="scope.row.newColumnEditor" v-model="scope.row.sid"  @blur="save()"></el-input>
+                        <el-input v-if="scope.row.newColumnEditor" v-model="scope.row.sid"></el-input>
                         <span v-else>{{ scope.row.sid}}</span>
                     </template>
                 </el-table-column>
@@ -262,6 +272,7 @@
                 departLoading: false,
                 seasonLoading: false,
                 courseLoading: false,
+                fileList: [],
                 pageMess: {
                     total:  0,
                     currentPage: 0,
@@ -341,12 +352,13 @@
                     course: "",
                     season: "",
                     grade: "",
-                    level: "A",
+                    level: "",
                     newColumnEditor: true,
                     gradeEditor: true,
                 })
             },
             save(index, row) {
+                row.level = this.getLevel(row.grade)
                 let isSave = true;
                 for(let key in row){
                     if(row[key] === ""){
@@ -376,6 +388,20 @@
                     });
                 }
             },
+
+            getLevel(grade) {
+                debugger
+                if(grade<60){
+                    return 'D'
+                }else if(grade<80){
+                    return 'C'
+                }else if(grade<90){
+                    return 'B'
+                }else{
+                    return 'A'
+                }
+            },
+
             idFilter(value) {
                 let filterTable = this.searchResult.filter(function (row) {
                     return row.sid.search(value) !== -1;
@@ -510,6 +536,16 @@
 
             pageChange(index) {
                 this.tableData = this.searchResult.slice((index-1)*this.pageMess.pageSize, index*this.pageMess.pageSize);
+            },
+
+            upLoadSuccess(response, file, fileList) {
+                this.$message({
+                    message: '批量导入成功',
+                    type: 'success'
+                });
+                setTimeout(()=> {
+                    this.fileList = [];
+                },2000)
             }
         }
     }
